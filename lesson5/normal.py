@@ -110,12 +110,16 @@ def current_path_str():
     return current_path
 
 
-print_actions()
+def conemu():
+    print_actions()
+    while True:
+        action_str = input(f'{current_path} $: ')
+        try:
+            do_action(action_str)
+            print('')
+        except BaseException as err:
+            print(*err.args, sep='\n')
 
-while True:
-    action_str = input(f'{current_path} $: ')
-    try:
-        do_action(action_str)
-        print('')
-    except BaseException as err:
-        print(*err.args, sep='\n')
+
+if __name__ == "__main__":
+    conemu()
