@@ -52,6 +52,8 @@ def mkdir(dir_name):
         os.mkdir(os.path.join(current_path, dir_name))
     except BaseException:
         raise MyError(f'Не удалось создать "{dir_name}"')
+    else:
+        print(f'"{dir_name}" успешно создана')
 
 
 def remove(file_name):
@@ -60,9 +62,12 @@ def remove(file_name):
             for name in files:
                 os.remove(os.path.join(root, name))
             for name in dirs:
-                os.rmdir(os.path.join(root, name))
+                remove(os.path.join(root, name))
+            os.rmdir(os.path.join(root))
     except BaseException:
         raise MyError(f'Не удалось удалить "{file_name}"')
+    else:
+        print(f'"{file_name}" успешно удалена')
 
 
 def get_action(action_str):
