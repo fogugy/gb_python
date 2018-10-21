@@ -20,6 +20,7 @@
 
 import os
 import sys
+import shutil
 
 print('sys.argv = ', sys.argv)
 
@@ -27,6 +28,10 @@ print('sys.argv = ', sys.argv)
 def print_help():
     print("help - получение справки")
     print("mkdir <dir_name> - создание директории")
+    print("cp <dir_name> - клонирование директории")
+    print("rm <dir_name> - удаление директории")
+    print("cd <full_path or relative_path> - меняет текущую директорию на указанную")
+    print("ls - отображение полного пути текущей директории")
     print("ping - тестовый ключ")
 
 
@@ -46,16 +51,53 @@ def ping():
     print("pong")
 
 
+def cp():
+    try:
+        new_dir_name = f'{dir_name}_copy' if not dir_name_dest else dir_name
+        if not os.path.exists(dir_name):
+            return
+        shutil.copytree(dir_name_dest or os.getcwd(), new_dir_name)
+        print('директория {} скопирована'.format(dir_name))
+    except FileExistsError:
+        print('директория {} уже существует'.format(new_dir_name))
+
+
+def rm():
+    try:
+        shutil.rmtree(dir_name)
+        print('директория {} удалена'.format(dir_name))
+    except FileExistsError as err:
+        print(err.args)
+
+
+def cd():
+    os.chdir(dir_name)
+    print(os.getcwd())
+
+
+def ls():
+    print('\t'.join([name for name in os.listdir(dir_name)]))
+
+
 do = {
     "help": print_help,
     "mkdir": make_dir,
-    "ping": ping
+    "ping": ping,
+    "cp": cp,
+    "rm": rm,
+    "cd": cd,
+    "ls": ls,
 }
 
 try:
     dir_name = sys.argv[2]
 except IndexError:
     dir_name = None
+
+try:
+    dir_name_dest = sys.argv[3]
+except IndexError:
+    dir_name_dest = None
 
 try:
     key = sys.argv[1]
