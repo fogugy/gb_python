@@ -1,4 +1,11 @@
 import argparse
+from MainController import MainController
+
+
+def run(args):
+    print(args.filename)
+    mc = MainController()
+    mc.query(args.filename, args.city)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -12,4 +19,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    print(args)
+    run(args)
